@@ -10,7 +10,7 @@
 #define window_height 512
 
 #define qt_max_points 1
-#define max_points 10000
+#define max_points 1000
 
 SDL_Renderer *renderer;
 SDL_Window *window;
@@ -112,6 +112,7 @@ int quadtree_insert(quadtree_node *nd, point *pt)
 				}
 			}
 			
+			//node is no longer leaf node, remove points
 			free(nd->points);
 			nd->points = NULL;
 			
@@ -168,11 +169,7 @@ int draw_quadtree(quadtree_node *nd)
 int main(int argc, char *argv[])
 {
 	quadtree_node root;
-	
-	if (!quadtree_init(&root, 0, 0, 512, 512)){
-		
-		return 0;
-	}
+	quadtree_init(&root, 0, 0, 512, 512);
 	
 	for (int i = 0; i < max_points; i++){
 		if (points[i] != NULL){
@@ -187,23 +184,20 @@ int main(int argc, char *argv[])
 	
 	SDL_Event event;
 	
-	int mouse_held = 0;
-	
 	for (;;){
 		while (SDL_PollEvent(&event)){
 			switch (event.type){
-				case SDL_MOUSEMOTION:
-					if (mouse_held){
-						SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-						SDL_RenderClear(renderer);
-						SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-						
+				case SDL_MOUSEBUTTONDOWN:
+					if (event.button.button == SDL_BUTTON_LEFT){
 						point *p = point_add(event.button.x, event.button.y);
 						
 						if (p == NULL){
-							perror("too many points");
-							goto quit;
+							break;
 						}
+						
+						SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+						SDL_RenderClear(renderer);
+						SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 						
 						quadtree_insert(&root, p);
 						draw_quadtree(&root);
@@ -212,15 +206,7 @@ int main(int argc, char *argv[])
 							if (points[i] != NULL){
 								SDL_RenderDrawPoint(renderer, points[i]->x, points[i]->y);
 							}
-						}						
-					}
-					break;
-				case SDL_MOUSEBUTTONUP:
-					mouse_held = 0;
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-					if (event.button.button == SDL_BUTTON_LEFT){
-						mouse_held = 1;
+						}	
 					}
 					break;
 				case SDL_QUIT:
