@@ -111,17 +111,15 @@ void update_st()
 	static bool m_prv = false;
 	
 	uint32_t mx,my;
-	uint32_t flags = SDL_GetMouseState(&mx, &my);	
-	
+	uint32_t mask = SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT);	
 	/* update mouse pressed state */
-	if ((flags & SDL_BUTTON(SDL_BUTTON_LEFT)) && m_prv == false){
+	if (mask && m_prv == false){
 		mouse_clk(mx, my);
 		
 		m_prv = true;
-	} else if (!(flags & SDL_BUTTON(SDL_BUTTON_LEFT)) && m_prv == true){
+	} else if (!mask && m_prv == true){
 		m_prv = false;
 	}
-	
 	mouse_upt(mx, my);
 	upt_cell_st();
 }
