@@ -115,7 +115,6 @@ void update_st()
 	/* update mouse pressed state */
 	if (mask && m_prv == false){
 		mouse_clk(mx, my);
-		
 		m_prv = true;
 	} else if (!mask && m_prv == true){
 		m_prv = false;
