@@ -116,7 +116,7 @@ void update_st()
 	/* update mouse pressed state */
 	if ((flags & SDL_BUTTON(SDL_BUTTON_LEFT)) && m_prv == false){
 		mouse_clk(mx, my);
-		printf("click, type %d\n", c_select);
+		
 		m_prv = true;
 	} else if (!(flags & SDL_BUTTON(SDL_BUTTON_LEFT)) && m_prv == true){
 		m_prv = false;
