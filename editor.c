@@ -210,7 +210,7 @@ void display(BUFFER *buf)
 int main(int argc, char *argv[]) 
 {
 	//BUFFER *buf = load_file(argv[1]);
-	BUFFER *buf = load_file("C:/Users/Fozze/Desktop/text.txt");
+	BUFFER *buf = load_file("text.txt");
 
 	if (buf == NULL)
 	{
